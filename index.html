@@ -1,0 +1,159 @@
+To create a website for Netlify, you typically provide HTML, CSS, and JavaScript files. For a login page that's vulnerable to SQL injection, you would **need a backend server and a database** that processes the login credentials. A purely static HTML page served by Netlify (without backend functions) cannot, by itself, be vulnerable to SQL injection, as SQL injection attacks target the database queries executed on the server.
+
+However, I can provide you with an HTML login page with client-side JavaScript that demonstrates:
+1.  **Multiple "correct" logins** (hardcoded in the JavaScript for demonstration purposes, as there's no backend).
+2.  A form that *would* submit data to a backend. I'll include comments indicating where a real backend API call would go and where the SQL injection vulnerability would typically occur if the backend were insecure.
+
+This example will simulate the frontend of such a system.
+
+I will update the HTML node to contain this page.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insecure Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .login-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .form-group input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        #message {
+            margin-top: 15px;
+            color: red;
+            font-weight: bold;
+        }
+        .info {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #666;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Login">
+            </div>
+        </form>
+        <div id="message"></div>
+        <div class="info">
+            <p><strong>Note:</strong> This is a client-side simulation. Real SQL Injection vulnerabilities occur on the backend where user input is used to build database queries without proper sanitization.</p>
+            <p><strong>Try these (client-side) credentials:</strong></p>
+            <ul>
+                <li>user1 / pass123</li>
+                <li>admin / adminpass</li>
+                <li>test / password</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
+
+            // --- Client-side simulated login logic ---
+            // In a real application, this data would be sent to a backend server.
+            // The SQL injection vulnerability would be on the server-side,
+            // if the server constructs SQL queries directly with user input
+            // like `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`
+            // without proper sanitization or prepared statements.
+
+            const validCredentials = {
+                "user1": "pass123",
+                "admin": "adminpass",
+                "test": "password"
+            };
+
+            if (validCredentials[username] === password) {
+                messageDiv.style.color = "green";
+                messageDiv.textContent = "Login Successful! Welcome, " + username + ".";
+                // In a real app, you'd redirect to a dashboard or set a session cookie.
+            } else {
+                messageDiv.style.color = "red";
+                messageDiv.textContent = "Invalid Username or Password.";
+            }
+
+            // --- SQL Injection Conceptual Point ---
+            // If this were a real backend call, the 'username' field could be exploited.
+            // For example, if a backend query was:
+            // `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`
+            // An attacker could input `username = 'admin'--` and any password.
+            // This would make the query:
+            // `SELECT * FROM users WHERE username = 'admin'--' AND password = 'anypassword'`
+            // The `--` comments out the rest of the query, potentially authenticating as admin.
+            // Or `username = 'admin' OR 1=1--` to bypass authentication entirely.
+
+            // To actually make it vulnerable and hostable on Netlify with backend logic,
+            // you would typically use Netlify Functions (serverless functions)
+            // which could connect to a database and process the input insecurely.
+            // This client-side code *sends* the potential payload, but doesn't process it.
+        });
+    </script>
+</body>
+</html>
+```
