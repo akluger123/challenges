@@ -1,0 +1,7 @@
+usrname: my name
+passwd: in the pass file
+cover steghide = my name
+pass steghide = a hidden clue smwhere
+to complete this challenge, you must use steg hide to get the embeded files out ofthe pictures.
+then run the python script with python3 to see what the answer is. then email me what the py script tells you and you
+will get a prize.
