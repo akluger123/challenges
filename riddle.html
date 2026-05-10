@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Python Script</title>
+    <!-- Essential PyScript setup -->
+    <link rel="stylesheet" href="https://pyscript.net">
+    <script type="module" src="https://pyscript.net"></script>
+</head>
+<body>
+    <h1>Console Output:</h1>
+    
+    <script type="py">
+from pyscript import window
+
+# We use window.prompt to mimic the exact behavior of input() in a browser
+print("BTW my name is ami")
+
+U = window.prompt("Username: ")
+P = window.prompt("Password: ")
+
+if U == "ami" and P == "oscar":
+    print("congrats, tell me or email me <321cba> you get a prize")
+else:
+    print("incorrect login, try again")
+    </script>
+</body>
+</html>
